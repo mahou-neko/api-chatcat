@@ -51,7 +51,7 @@ def processRequest(req):
         result = urlopen(baseurl).read()
         data = json.loads(result)
         res = makeWebhookResultForGetJoke(data)
-        
+
     elif req.get("result").get("action")=="layerabout":
         result = req.get("result")
         parameters = result.get("parameters")
@@ -75,7 +75,15 @@ def makeYqlQuery(req):
 def makeWebhookResultLayerAbout(layer):
     layerdef = {'physical layer':'The physical layer handels mechanical and electrical/optical linkage. It converts logical symbols into electrical(optical) ones and measures optical signals to reconstruct logical symbols', 
     'data link layer':'The data link layer covers transmission errors and handels media access. It is also concerned with congestion control.', 
-    'network layer':'In the network layer paths from senders to recipients are chosen. Hence this layer also has to cope with heterogenius subnets and is responsibe for accounting.'}
+    'network layer':'On the network layer paths from senders to recipients are chosen. Hence this layer also has to cope with heterogenius subnets and is responsibe for accounting.',
+    'transport layer':'The transport layer offers secure end-to-end-communication between processes. Therefore it is also in charge for data stream control between endsystems. A few concerns of this layer are multiplexing, segmentation and acknowledgements in order to provide reliable transmission.',
+    'session layer':'The name of this layer almost gives all its functionalities away! It mostly deals with communication managment, dialog control and synchronization.',
+    'presentation layer':'Converting between dataformats, compression and decrompession as well as encryption are the main converns of the presentation layer.',
+    'application layer':'Its name almost tells it all. The application layer handels communication between applications and deals with application specific services like e-mail, telnet etc.',
+    'layer':'Alright! Layers basically are subdivisions of communication models. A Layer basically is a collection of similar functions that provide services to the layer above it and receives services from the layer below it.',
+    'internet':'The internet layer has the same responsabilites as the third layer of the OSI model (which would be the network layer).',
+    'link':'The link layer corresponds to the OSI model layers 1 and 2 (physical layer and data link layer).'}
+    #maybe add a would you like to hear more right here! Would be a nice conversation flow!
 
     #might check if layer is defined in our dic!
     speech = layerdef[layer]
