@@ -45,11 +45,13 @@ def processRequest(req):
         result = urlopen(yql_url).read()
         data = json.loads(result)
         res = makeWebhookResult(data)
+
     elif req.get("result").get("action")=="getjoke":
         baseurl = "http://api.icndb.com/jokes/random"
         result = urlopen(baseurl).read()
         data = json.loads(result)
         res = makeWebhookResultForGetJoke(data)
+        
     elif req.get("result").get("action")=="layerabout":
         result = req.get("result")
         parameters = result.get("parameters")
