@@ -70,11 +70,17 @@ def processRequest(req):
         congestion2 = parameters.get("congestion_control")
         res = congestion_control_layer2(congestion2)
 
-    elif req.get("result").get("action")=="layercong":
+    elif req.get("result").get("action")=="get_protocol_spec":
         result = req.get("result")
         parameters = result.get("parameters")
-        congestion = parameters.get("congestion_control")
-        res = congestion_cont(congestion)
+        prot = parameters.get("protocols")
+        res = prot_info(prot)
+
+    elif req.get("result").get("action")=="get_protocol_spec":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        prot = parameters.get("protocols")
+        res = prot_more_info(prot)
 
     #elif req.get("result").get("action")=="greeting":
         #result = req.get("result")
@@ -95,23 +101,26 @@ def makeYqlQuery(req):
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 
-def congestion_cont(congestion):
-    con_methods = {'aloha':'The first version of the protocol was quite simple: If you have data to send, send the data',
-                    's-aloha':'An improvement to the original ALOHA protocol was "Slotted ALOHA", which introduced discrete timeslots and increased the maximum throughput. A station can ',
-                    'CSMA':'Carrier-sense multiple access (CSMA) is a media access control (MAC) protocol in which a node verifies the absence of other traffic before transmitting on a shared',
-                    'CSMA/CD':'CSMA/CD is used to improve CSMA performance by terminating transmission as soon as a collision is detected, thus shortening the time required before a retry can be attempted.',
-                    'CSMA/CA':'In CSMA/CA collision avoidance is used to improve the performance of CSMA. If the transmission medium is sensed busy before transmission,'}
-
-    if congestion in con_methods:
-        speech = con_methods[congestion]
+def prot_info(prot):
+    protdef = {'TCP':'TCP = Transmission Control Protocol',
+                'HTTP':'HTTP = Hyper Text Transfer Protocol',
+                'SMTP':'SMTP = Simple Mail Transport Protocol',
+                'IMAP':'IMAP = Internet Message Access Protocol',
+                'DNS':'DNS = Domain Name System',
+                'SIP':'SIP = Session Initiation Protocol',
+                'RTP':'RTP = Real-time Transport Protocol',
+                'HTML':'HTML = Hypertext Markup Language',
+                'IP':'IP = Internet Protocol',
+                'UDP':'UDP = User Datagram Protocol',
+                'RPC':'RPC = Remote Procedure Call'
+                }
+    #in case of no specific protocol - entities none or protocol
+    if prot in protdef:
+        speech = protdef[prot]
     else:
-        speech = "This method is not part of layer 2's congestion control!"
-
-    if congestion == "RED":
-        return {"followupEvent":{"name":"red_con","data":{" ":" "}}}
-
-    if congestion == "congestion control general":
-        return {"followupEvent":{"name":"con_general","data":{" ":" "}}}
+        speech = "I guess it's time to switch topics then :)"
+    if prot == "none" or prot == "protocol":
+        speech = "In this case... Would you like to talk about protocols in general then?"
 
     return {
         "speech": speech,
@@ -120,6 +129,37 @@ def congestion_cont(congestion):
         # "contextOut": [],
         "source": "apiai-weather-webhook-sample"
     }
+
+def prot_more_info(prot):
+    protdef = {'TCP':'The Transmission Control Protocol (TCP) is one of the main protocols of the Internet protocol suite. It originated in the initial network implementation in which it complemented the Internet Protocol (IP). Therefore, the entire suite is commonly referred to as TCP/IP. TCP provides reliable, ordered, and error-checked delivery of a stream of octets between applications running on hosts communicating by an IP network. Major Internet applications such as the World Wide Web, email, remote administration, and file transfer rely on TCP.',
+                'HTTP':'The Hypertext Transfer Protocol (HTTP) is an application protocol for distributed, collaborative, and hypermedia information systems. HTTP is the foundation of data communication for the World Wide Web. Hypertext is structured text that uses logical links (hyperlinks) between nodes containing text. HTTP is the protocol to exchange or transfer hypertext.',
+                'SMTP':'Simple Mail Transfer Protocol (SMTP) is an Internet standard for electronic mail (email) transmission. Although electronic mail servers and other mail transfer agents use SMTP to send and receive mail messages, user-level client mail applications typically use SMTP only for sending messages to a mail server for relaying. For retrieving messages, client applications usually use either IMAP or POP3.',
+                'IMAP':'In computing, the Internet Message Access Protocol (IMAP) is an Internet standard protocol used by e-mail clients to retrieve e-mail messages from a mail server over a TCP/IP connection. IMAP was designed with the goal of permitting complete management of an email box by multiple email clients, therefore clients generally leave messages on the server until the user explicitly deletes them.',
+                'DNS':'The Domain Name System (DNS) is a hierarchical decentralized naming system for computers, services, or other resources connected to the Internet or a private network. It associates various information with domain names assigned to each of the participating entities. Most prominently, it translates more readily memorized domain names to the numerical IP addresses needed for locating and identifying computer services and devices with the underlying network protocols. By providing a worldwide, distributed directory service, the Domain Name System is an essential component of the functionality on the Internet, that has been in use since 1985.',
+                'SIP':'The Session Initiation Protocol (SIP) is a communications protocol for signaling and controlling multimedia communication sessions in applications of Internet telephony for voice and video calls, in private IP telephone systems, as well as in instant messaging over Internet Protocol (IP) networks. SIP works in conjunction with several other protocols that specify and carry the session media. Media type and parameter negotiation and media setup is performed with the Session Description Protocol (SDP), which is carried as payload in SIP messages. For the transmission of media streams (voice, video) SIP typically employs the Real-time Transport Protocol (RTP) or the Secure Real-time Transport Protocol (SRTP).',
+                'RTP':'The Real-time Transport Protocol (RTP) is a network protocol for delivering audio and video over IP networks. RTP is used extensively in communication and entertainment systems that involve streaming media, such as telephony, video teleconference applications, television services and web-based push-to-talk features. RTP typically runs over User Datagram Protocol (UDP). RTP is used in conjunction with the RTP Control Protocol (RTCP). While RTP carries the media streams (e.g., audio and video), RTCP is used to monitor transmission statistics and quality of service (QoS) and aids synchronization of multiple streams. RTP is one of the technical foundations of Voice over IP and in this context is often used in conjunction with a signaling protocol such as the Session Initiation Protocol (SIP) which establishes connections across the network.',
+                'HTML':'Hypertext Markup Language (HTML) is the standard markup language for creating web pages and web applications. With Cascading Style Sheets (CSS) and JavaScript it forms a triad of cornerstone technologies for the World Wide Web. Web browsers receive HTML documents from a webserver or from local storage and render them into multimedia web pages. HTML describes the structure of a web page semantically and originally included cues for the appearance of the document.',
+                'IP':'The Internet Protocol (IP) is the principal communications protocol in the Internet protocol suite for relaying datagrams across network boundaries. Its routing function enables internetworking, and essentially establishes the Internet. IP has the task of delivering packets from the source host to the destination host solely based on the IP addresses in the packet headers. For this purpose, IP defines packet structures that encapsulate the data to be delivered. It also defines addressing methods that are used to label the datagram with source and destination information.',
+                'UDP':'In electronic communication, the User Datagram Protocol (UDP) is one of the core members of the Internet protocol suite. With UDP, computer applications can send messages, in this case referred to as datagrams, to other hosts on an Internet Protocol (IP) network. Prior communications are not required in order to set up transmission channels or data paths. UDP uses a simple connectionless transmission model with a minimum of protocol mechanism. UDP provides checksums for data integrity, and port numbers for addressing different functions at the source and destination of the datagram. It has no handshaking dialogues, and thus exposes the users program to any unreliability of the underlying network: there is no guarantee of delivery, ordering, or duplicate protection',
+                'RPC':'n distributed computing, a remote procedure call (RPC) is when a computer program causes a procedure (subroutine) to execute in a different address space (commonly on another computer on a shared network), which is coded as if it were a normal (local) procedure call, without the programmer explicitly coding the details for the remote interaction. That is, the programmer writes essentially the same code whether the subroutine is local to the executing program, or remote. This is a form of client–server interaction (caller is client, executor is server), typically implemented via a request–response message-passing system.'
+                }
+    #in case of no specific protocol - entities none or protocol
+    if prot in protdef:
+        speech = protdef[prot]
+    else:
+        speech = "I guess it's time to switch topics then :)"
+    if prot == "none" or prot == "protocol":
+        speech = "In this case... Would you like to talk about protocols in general then?"
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
+
+
 
 def congestion_control_layer2(congestion):
     con_methods = {'aloha':'The first version of the protocol was quite simple: If you have data to send, send the data - If, while you are transmitting data, you receive any data from another station, there has been a message collision. All transmitting stations will need to try resending "later". Note that the first step implies that Pure ALOHA does not check whether the channel is busy before transmitting. Since collisions can occur and data may have to be sent again, ALOHA cannot use 100 percent of the capacity of the communications channel. How long a station waits until it transmits, and the likelihood a collision occurs are interrelated, and both affect how efficiently the channel can be used.',
