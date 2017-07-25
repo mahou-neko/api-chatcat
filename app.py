@@ -57,6 +57,12 @@ def processRequest(req):
         parameters = result.get("parameters")
         layer = parameters.get("layer")
         res = makeWebhookResultLayerAbout(layer)
+
+    elif req.get("result").get("action")=="greeting":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        #eve = parameters.get("eve")
+        res = makeWebhookResultTriggerEvent()
     else:
         return {}
  
@@ -71,6 +77,18 @@ def makeYqlQuery(req):
         return None
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+
+def makeWebhookResultTriggerEvent():
+    speech = "It looks like you triggered an event!"
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+        "followupEvent": "name":"eventtry"
+    }
 
 def makeWebhookResultLayerAbout(layer):
     layerdef = {'physical layer':'The physical layer handels mechanical and electrical/optical linkage. It converts logical symbols into electrical(optical) ones and measures optical signals to reconstruct logical symbols', 
