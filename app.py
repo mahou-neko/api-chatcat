@@ -50,6 +50,11 @@ def processRequest(req):
         result = urlopen(baseurl).read()
         data = json.loads(result)
         res = makeWebhookResultForGetJoke(data)
+    elif req.get("result").get("action")=="layerabout":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        layer = parameters.get("layer")
+        res = makeWebhookResultLayerAbout(layer)
     else:
         return {}
  
@@ -65,6 +70,21 @@ def makeYqlQuery(req):
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 
+def makeWebhookResultLayerAbout(layer):
+    layerdef = {'physical layer':'The physical layer handels mechanical and electrical/optical linkage. It converts logical symbols into electrical(optical) ones and measures optical signals to reconstruct logical symbols', 
+    'data link layer':'The data link layer covers transmission errors and handels media access. It is also concerned with congestion control.', 
+    'network layer':'In the network layer paths from senders to recipients are chosen. Hence this layer also has to cope with heterogenius subnets and is responsibe for accounting.'}
+
+    #might check if layer is defined in our dic!
+    speech = layerdef[layer]
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
 
 def makeWebhookResult(data):
     query = data.get('query')
