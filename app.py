@@ -60,7 +60,7 @@ def processRequest(req):
 
     elif req.get("result").get("action")=="greeting":
         result = req.get("result")
-        parameters = result.get("parameters")
+        #parameters = result.get("parameters")
         #eve = parameters.get("eve")
         res = makeWebhookResultTriggerEvent()
     else:
