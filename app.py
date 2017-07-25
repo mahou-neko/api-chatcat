@@ -116,7 +116,7 @@ def prot_info(prot):
                 }
     #in case of no specific protocol - entities none or protocol
     if prot in protdef:
-        speech = protdef[prot]
+        speech = protdef[prot] + "Would you like to hear a bit more about " + prot + " ?"
     else:
         speech = "I guess it's time to switch topics then :)"
     if prot == "none" or prot == "protocol":
