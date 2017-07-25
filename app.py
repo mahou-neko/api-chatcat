@@ -58,11 +58,11 @@ def processRequest(req):
         layer = parameters.get("layer")
         res = makeWebhookResultLayerAbout(layer)
 
-    elif req.get("result").get("action")=="greeting":
-        result = req.get("result")
+    #elif req.get("result").get("action")=="greeting":
+        #result = req.get("result")
         #parameters = result.get("parameters")
         #eve = parameters.get("eve")
-        res = makeWebhookResultTriggerEvent()
+        #res = makeWebhookResultTriggerEvent()
     else:
         return {}
  
