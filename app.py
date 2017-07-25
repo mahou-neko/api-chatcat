@@ -119,11 +119,11 @@ def congestion_control_layer4(congestion):
     con_methods = {'reno':'If three duplicate ACKs are received, Reno will perform a fast retransmit and skip the slow start phase (which is part of Tahoe s procedure) by instead halving the congestion window (instead of setting it to 1 MSS like Tahoe), setting the slow start threshold equal to the new congestion window, and enter a phase called Fast Recovery.',
                     'tahoe':'If three duplicate ACKs are received, Tahoe performs a fast retransmit, sets the slow start threshold to half of the current congestion window, reduces the congestion window to 1 MSS, and resets to slow start state',
                     'TCP congestion control':'Congestion control via TCP is deployed either with Reno or Tahoe. Whenever duplicate ACKs are received either a slow start or a fast recovery is performed'}
-
-    if congestion in con_methods:
-        speech = con_methods[congestion]
-    else:
-        speech = "This method is not part of layer 4's congestion control!"
+    speech = con_methods[congestion]
+    #if congestion in con_methods:
+        #speech = con_methods[congestion]
+    #else:
+        #speech = "This method is not part of layer 4's congestion control!"
 
     #if congestion == "RED":
         #return {"followupEvent":{"name":"red_con","data":{" ":" "}}}
