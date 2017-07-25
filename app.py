@@ -81,14 +81,14 @@ def makeYqlQuery(req):
 def makeWebhookResultTriggerEvent():
     speech = "It looks like you triggered an event!"
 
-    return {
-        "speech": speech,
-        "displayText": speech,
+    return {"followupEvent":{"name":"eventtry","data":{" ":" "}}}
+        #"speech": speech,
+        #"displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
-        "followupEvent": "eventtry"
-    }
+        #"source": "apiai-weather-webhook-sample"
+        #"followupEvent": "eventtry"
+    #}
 
 def makeWebhookResultLayerAbout(layer):
     layerdef = {'physical layer':'The physical layer handels mechanical and electrical/optical linkage. It converts logical symbols into electrical(optical) ones and measures optical signals to reconstruct logical symbols', 
