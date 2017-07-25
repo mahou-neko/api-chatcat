@@ -81,7 +81,14 @@ def makeYqlQuery(req):
 def makeWebhookResultTriggerEvent():
     speech = "It looks like you triggered an event!"
 
-    return {"followupEvent":{"name":"eventtry","data":{" ":" "}}}
+    return {
+    "speech": speech,
+    "displayText": speech,
+    # "data": data,
+    # "contextOut": [],
+    "source": "apiai-weather-webhook-sample",
+    "followupEvent":{"name":"eventtry","data":{" ":" "}}
+    }
         #"speech": speech,
         #"displayText": speech,
         # "data": data,
