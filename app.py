@@ -125,11 +125,11 @@ def congestion_control_layer4(congestion):
     else:
         speech = "This method is not part of layer 4's congestion control!"
 
-    if congestion == "RED":
-        return {"followupEvent":{"name":"red_con","data":{" ":" "}}}
+    #if congestion == "RED":
+        #return {"followupEvent":{"name":"red_con","data":{" ":" "}}}
 
-    if congestion == "congestion control general":
-        return {"followupEvent":{"name":"con_general","data":{" ":" "}}}
+    #if congestion == "congestion control general":
+        #return {"followupEvent":{"name":"con_general","data":{" ":" "}}}
 
     return {
         "speech": speech,
