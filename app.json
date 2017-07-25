@@ -2,6 +2,6 @@
   "name": "chatcat test",
   "description": "test webhook for chatcat",
   "repository": "https://github.com/mahou-neko/api-chatcat",
-  "logo": "",
+  "logo": "https://api.ai/_static/0684c29c9b/images/apiai/lockup.svg",
   "keywords": ["api.ai", "natural language"]
 }
