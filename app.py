@@ -58,6 +58,18 @@ def processRequest(req):
         layer = parameters.get("layer")
         res = makeWebhookResultLayerAbout(layer)
 
+    elif req.get("result").get("action")=="layer4_congestion":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        congestion = parameters.get("congestion_control")
+        res = congestion_control_layer4(congestion)
+
+    elif req.get("result").get("action")=="layer2_congestion":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        congestion = parameters.get("congestion_control")
+        res = congestion_control_layer2(congestion)
+
     #elif req.get("result").get("action")=="greeting":
         #result = req.get("result")
         #parameters = result.get("parameters")
@@ -68,7 +80,6 @@ def processRequest(req):
  
     return res
 
-
 def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
@@ -77,6 +88,57 @@ def makeYqlQuery(req):
         return None
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+
+def congestion_control_layer2(congestion):
+    con_methods = {'aloha':'The first version of the protocol was quite simple: If you have data to send, send the data - If, while you are transmitting data, you receive any data from another station, there has been a message collision. All transmitting stations will need to try resending "later". Note that the first step implies that Pure ALOHA does not check whether the channel is busy before transmitting. Since collisions can occur and data may have to be sent again, ALOHA cannot use 100 percent of the capacity of the communications channel. How long a station waits until it transmits, and the likelihood a collision occurs are interrelated, and both affect how efficiently the channel can be used.',
+                    's-aloha':'An improvement to the original ALOHA protocol was "Slotted ALOHA", which introduced discrete timeslots and increased the maximum throughput. A station can start a transmission only at the beginning of a timeslot, and thus collisions are reduced. In this case, only transmission-attempts within 1 frame-time and not 2 consecutive frame-times need to be considered, since collisions can only occur during each timeslot.',
+                    'CSMA':'Carrier-sense multiple access (CSMA) is a media access control (MAC) protocol in which a node verifies the absence of other traffic before transmitting on a shared transmission medium. A transmitter attempts to determine whether another transmission is in progress before initiating a transmission using a carrier-sense mechanism. That is, it tries to detect the presence of a carrier signal from another node before attempting to transmit.',
+                    'CSMA/CD':'CSMA/CD is used to improve CSMA performance by terminating transmission as soon as a collision is detected, thus shortening the time required before a retry can be attempted.',
+                    'CSMA/CA':'In CSMA/CA collision avoidance is used to improve the performance of CSMA. If the transmission medium is sensed busy before transmission, then the transmission is deferred for a random interval. This random interval reduces the likelihood that two or more nodes waiting to transmit will simultaneously begin transmission upon termination of the detected transmission, thus reducing the incidence of collision.'}
+
+    if congestion in con_methods:
+        speech = con_methods[congestion]
+    else:
+        speech = "This method is not part of layer 4's congestion control!"
+
+    if congestion == "RED":
+        return {"followupEvent":{"name":"red_con","data":{" ":" "}}}
+
+    if congestion == "congestion control general":
+        return {"followupEvent":{"name":"con_general","data":{" ":" "}}}
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
+
+def congestion_control_layer4(congestion):
+    con_methods = {'reno':'If three duplicate ACKs are received, Reno will perform a fast retransmit and skip the slow start phase (which is part of Tahoe s procedure) by instead halving the congestion window (instead of setting it to 1 MSS like Tahoe), setting the slow start threshold equal to the new congestion window, and enter a phase called Fast Recovery.',
+                    'tahoe':'If three duplicate ACKs are received, Tahoe performs a fast retransmit, sets the slow start threshold to half of the current congestion window, reduces the congestion window to 1 MSS, and resets to slow start state',
+                    'TCP congestion control':'Congestion control via TCP is deployed either with Reno or Tahoe. Whenever duplicate ACKs are received either a slow start or a fast recovery is performed'}
+
+    if congestion in con_methods:
+        speech = con_methods[congestion]
+    else:
+        speech = "This method is not part of layer 4's congestion control!"
+
+    if congestion == "RED":
+        return {"followupEvent":{"name":"red_con","data":{" ":" "}}}
+
+    if congestion == "congestion control general":
+        return {"followupEvent":{"name":"con_general","data":{" ":" "}}}
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
+
 
 def makeWebhookResultTriggerEvent():
     speech = "It looks like you triggered an event!"
