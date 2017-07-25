@@ -1,7 +1,7 @@
 {
-  "name": "API.AI webhook demonstration",
-  "description": "API.AI webhook demonstration",
+  "name": "chatcat test",
+  "description": "test webhook for chatcat",
   "repository": "https://github.com/mahou-neko/api-chatcat",
-  "logo": "http://xvir.github.io/img/apiai.png",
+  "logo": "",
   "keywords": ["api.ai", "natural language"]
 }
