@@ -87,7 +87,7 @@ def makeWebhookResultTriggerEvent():
         # "data": data,
         # "contextOut": [],
         "source": "apiai-weather-webhook-sample"
-        "followupEvent":"eventtry"
+        "followupEvent": "eventtry"
     }
 
 def makeWebhookResultLayerAbout(layer):
