@@ -85,7 +85,7 @@ def processRequest(req):
     elif req.get("result").get("action")=="get_protocol_info_more":
         result = req.get("result")
         parameters = result.get("parameters")
-        prot = parameters.get("protocols")
+        prot = parameters.get("protocol")
         infor = parameters.get("Information")
         res = prot_more_info_more(prot, infor)
 
