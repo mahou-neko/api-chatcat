@@ -89,6 +89,12 @@ def processRequest(req):
         infor = parameters.get("Information")
         res = prot_more_info_more(prot, infor)
 
+    elif req.get("result").get("action")=="get_ipvdiff":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        prot = parameters.get("protocols")
+        res = prot_more_info_more("IP", "advantages")
+
     #elif req.get("result").get("action")=="greeting":
         #result = req.get("result")
         #parameters = result.get("parameters")
