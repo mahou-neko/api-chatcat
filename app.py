@@ -95,6 +95,11 @@ def processRequest(req):
         prot = parameters.get("protocols")
         res = prot_more_info_more("IP", "advantages")
 
+    elif req.get("result").get("action")=="get_layer_info_general":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        res = layer_general_event()
+
     #elif req.get("result").get("action")=="greeting":
         #result = req.get("result")
         #parameters = result.get("parameters")
@@ -113,6 +118,19 @@ def makeYqlQuery(req):
         return None
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+
+def layer_general_event():
+    speech = "Layer general event was triggered!"
+
+    return {
+    "speech": speech,
+    "displayText": speech,
+    # "data": data,
+    # "contextOut": [],
+    "source": "apiai-weather-webhook-sample",
+    "followupEvent":{"name":"layergeneraltrigger","data":{" ":" "}}
+    }
+
 
 def prot_more_info_more(prot, infor):
 
