@@ -122,6 +122,8 @@ def prot_more_info_more(prot, infor):
         speech = prot_disadvantages(prot)
     elif infor == "alternatives":
         speech = prot_alternatives(prot)
+    elif infor == "difference":
+        speech = prot_diff_udp_tcp()
     else:
         speech = "Mhh I am not quite sure about " + infor + " but I will ask someone and come back to you :) In the mean time we could talk about advantages, issues or alternatives to this protocol or something else altogehter!"
 
@@ -132,6 +134,9 @@ def prot_more_info_more(prot, infor):
         # "contextOut": [],
         "source": "apiai-weather-webhook-sample"
     }
+
+def prot_diff_udp_tcp():
+    return "There are two types of Internet Protocol (IP) traffic. They are TCP or Transmission Control Protocol and UDP or User Datagram Protocol. TCP is connection oriented – once a connection is established, data can be sent bidirectional. UDP is a simpler, connectionless Internet protocol."
 
 
 def prot_advantages(prot):
