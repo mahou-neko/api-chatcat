@@ -82,6 +82,13 @@ def processRequest(req):
         prot = parameters.get("protocols")
         res = prot_more_info(prot)
 
+    elif req.get("result").get("action")=="get_protocol_info_more":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        prot = parameters.get("protocols")
+        infor = parameters.get("Information")
+        res = prot_more_info_more(prot, infor)
+
     #elif req.get("result").get("action")=="greeting":
         #result = req.get("result")
         #parameters = result.get("parameters")
@@ -100,6 +107,74 @@ def makeYqlQuery(req):
         return None
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+
+def prot_more_info_more(prot, infor):
+
+    if infor == "advantages":
+        speech = prot_advantages(prot)
+    elif infor == "issues":
+        speech = prot_disadvantages(prot)
+    elif infor == "alternatives":
+        speech = prot_alternatives(prot)
+    else:
+        speech = "Mhh I am not quite sure about " + infor + " but I will ask someone and come back to you :) In the mean time we could talk about advantages, issues or alternatives to this protocol or something else altogehter!"
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
+
+
+def prot_advantages(prot):
+    protdef = {'TCP':'The main advantage of TCP is that it offers connection-oriented communication - which means that  a communication session or a semi-permanent connection is established before any useful data can be transferred, and where a stream of data is delivered in the same order as it was sent',
+                'HTTP':'It s greates adantage is that basically is everywhere on the internet',
+                'SMTP':'Although proprietary systems (such as Microsoft Exchange and IBM Notes) and webmail systems (such as Outlook.com, Gmail and Yahoo! Mail) use their own non-standard protocols to access mail box accounts on their own mail servers, all use SMTP when sending or receiving email from outside their own systems.',
+                'IMAP':'The main advantage of IMAP would be that one can acces their mails directly on the server',
+                'DNS':'The Domain Name System delegates the responsibility of assigning domain names and mapping those names to Internet resources by designating authoritative name servers for each domain. Network administrators may delegate authority over sub-domains of their allocated name space to other name servers. This mechanism provides distributed and fault tolerant service and was designed to avoid a single large central database.',
+                'SIP':'SIPs main advantages lies within its capability to singal and control multimedia communication sessions',
+                'RTP':'RTPs greates strength is that it is designed for end-to-end, real-time, transfer of streaming media. The protocol provides facilities for jitter compensation and detection of out of sequence arrival in data, which are common during transmissions on an IP network. RTP allows data transfer to multiple destinations through IP multicast.',
+                'HTML':'Advantes of HTML are...',
+                'IP':'IPv4 provides safeguards to ensure that the IP packet header is error-free. A routing node calculates a checksum for a packet. If the checksum is bad, the routing node discards the packet. Although the Internet Control Message Protocol (ICMP) allows such notification, the routing node is not required to notify either end node of these errors. By contrast, in order to increase performance, and since current link layer technology is assumed to provide sufficient error detection, the IPv6 header has no checksum to protect it.',
+                'UDP':'Since UDP is connectionless it is a ton fastern than TCP.',
+                'RPC':'The greates advantage of the RPC model is that it implies a level of location transparency, namely that calling procedures is largely the same whether it is local or remote, but usually they are not identical, so local calls can be distinguished from remote calls. Remote calls are usually orders of magnitude slower and less reliable than local calls, so distinguishing them is important.'
+                }
+    return protdef[prot]
+
+
+def prot_disadvantages(prot):
+    protdef = {'TCP':'Some possible issues with TCP are Denial of Service, Connection hijaking and TCP veto.',
+                'HTTP':'The TRACE method can be used as part of a class of attacks known as cross-site tracing; for that reason, common security advice is for it to be disabled in the server configuration. Microsoft IIS supports a proprietary "TRACK" method, which behaves similarly, and which is likewise recommended to be disabled',
+                'SMTP':'One cannot delete or access mails directly on the server',
+                'IMAP':'IMAPs disadvantages would be...',
+                'DNS':'Several vulnerability issues were discovered and exploited by malicious users. One such issue is DNS cache poisoning, in which data is distributed to caching resolvers under the pretense of being an authoritative origin server, thereby polluting the data store with potentially false information and long expiration times (time-to-live). Subsequently, legitimate application requests may be redirected to network hosts operated with malicious intent.',
+                'SIP':'Issues with SIP include...',
+                'RTP':'The most common problems with RTP are...',
+                'HTML':'Common issues with HTML include...',
+                'IP':'Various error conditions may occur, such as data corruption, packet loss, duplication and out-of-order delivery. Because routing is dynamic, meaning every packet is treated independently, and because the network maintains no state based on the path of prior packets, different packets may be routed to the same destination via different paths, resulting in out-of-order sequencing at the receiver.',
+                'UDP':'Since UDP emphazises reduced latency over reliability, it is not the best option if you need your data to arrive in the correct order to guarantee correct delivery!',
+                'RPC':'I am not quite sure about RPCs disandavtages... I ll get back to you for this question though!'
+                }
+    return protdef[prot]
+
+
+def prot_alternatives(prot):
+    protdef = {'TCP':'UDP is the connection-less counterpart to TCP.',
+                'HTTP':'HTTPS would be a good alternative',
+                'SMTP':'IMAP or POP3 are more common alternatives',
+                'IMAP':'POP3 (more commonly used today) or SMTP woudl be alternatives to IMAP',
+                'DNS':'I think we did not disucss alternatives for DNS...',
+                'SIP':'Alternatives to SIP would be IAX, ICE, XMPP (Google Hangouts)',
+                'RTP':'Alternatives for RTP include...',
+                'HTML':'HTML alternatives would consist of...',
+                'IP':'There are two commonly used versions of IP - IPv4 and IPv6',
+                'UDP':'TCP would be the connection-oriented counterpart to UDP.',
+                'RPC':'RPCs are a form of inter-process communication (IPC), in that different processes have different address spaces: if on the same host machine, they have distinct virtual address spaces, even though the physical address space is the same; while if they are on different hosts, the physical address space is different. Many different (often incompatible) technologies have been used to implement the concept.'
+                }
+    return protdef[prot]
+
 
 def prot_info(prot):
     protdef = {'TCP':'TCP = Transmission Control Protocol',
