@@ -100,6 +100,17 @@ def processRequest(req):
         parameters = result.get("parameters")
         res = layer_general_event()
 
+    elif req.get("result").get("action")=="trigger_peer_event":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        res = peer_event()
+
+    elif req.get("result").get("action")=="p2p_info":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        topo = parameters.get("Topologies")
+        res = p2p_inf(topo)
+
     #elif req.get("result").get("action")=="greeting":
         #result = req.get("result")
         #parameters = result.get("parameters")
@@ -118,6 +129,38 @@ def makeYqlQuery(req):
         return None
 
     return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
+
+def p2p_inf(topo):
+    topodef = {'p2pv1':'Every node of the overlay knows k > 2 other nodes. Data gets flooded over the edges and every node contains every information.',
+                'p2pv2':'Every node contains only a small fraction of the data. Hence rare content is hard to find. This type of p2p is usually deployed via directory servers or flooding with backtracking.',
+                'dht':'Distributed Hash-Tables are a structured p2p overlay and utilizes a dynamic number of nodes. I realizes a cyclic data space and since every node knows the address of its logical successor, the complexity of searches is reduced to O(n).',
+                'structured':'Unstructured peer-to-peer networks do not impose a particular structure on the overlay network by design, but rather are formed by nodes that randomly form connections to each other.',
+                'unstructured':'In structured peer-to-peer networks the overlay is organized into a specific topology, and the protocol ensures that any node can efficiently search the network for a file/resource, even if the resource is extremely rare.'}
+    if topo in topodef:
+        speech = topodef[topo]
+    else:
+        speech = "Could you tell me the p2p form you are interested in again?"
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "apiai-weather-webhook-sample"
+    }
+
+
+def peer_event():
+    speech = "peer event was triggered!"
+
+    return {
+    "speech": speech,
+    "displayText": speech,
+    # "data": data,
+    # "contextOut": [],
+    "source": "apiai-weather-webhook-sample",
+    "followupEvent":{"name":"peerevent","data":{" ":" "}}
+    }
 
 def layer_general_event():
     speech = "Layer general event was triggered!"
